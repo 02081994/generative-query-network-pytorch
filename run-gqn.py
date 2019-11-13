@@ -46,7 +46,7 @@ if __name__ == '__main__':
     parser.add_argument('--data_dir', type=str, help='location of data', default="train")
     parser.add_argument('--log_dir', type=str, help='location of logging', default="log")
     parser.add_argument('--fraction', type=float, help='how much of the data to use', default=1.0)
-    parser.add_argument('--workers', type=int, help='number of data loading workers', default=4)
+    parser.add_argument('--workers', type=int, help='number of data loading workers', default=2)
     parser.add_argument('--data_parallel', type=bool, help='whether to parallelise based on data (default: False)', default=False)
     args = parser.parse_args()
 
@@ -115,8 +115,7 @@ if __name__ == '__main__':
     checkpoint_handler = ModelCheckpoint("./", "checkpoint", save_interval=1, n_saved=3,
                                          require_empty=False)
     trainer.add_event_handler(event_name=Events.EPOCH_COMPLETED, handler=checkpoint_handler,
-                              to_save={'model': model.state_dict, 'optimizer': optimizer.state_dict,
-                                       'annealers': (sigma_scheme.data, mu_scheme.data)})
+                              to_save={'model': model, 'optimizer': optimizer})
 
     timer = Timer(average=True).attach(trainer, start=Events.EPOCH_STARTED, resume=Events.ITERATION_STARTED,
                  pause=Events.ITERATION_COMPLETED, step=Events.ITERATION_COMPLETED)

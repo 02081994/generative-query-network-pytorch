@@ -47,13 +47,13 @@ class TowerRepresentation(nn.Module):
 
         # First skip-connected conv block
         skip_in  = F.relu(self.conv1(x))
-        skip_out = F.relu(self.conv2(skip_in))
+        # skip_out = F.relu(self.conv2(skip_in))
 
-        x = F.relu(self.conv3(skip_in))
-        x = F.relu(self.conv4(x)) + skip_out
+        # x = F.relu(self.conv3(skip_in))
+        # x = F.relu(self.conv4(x)) + skip_out
 
         # Second skip-connected conv block (merged)
-        skip_in = torch.cat([x, v], dim=1)
+        skip_in = torch.cat([skip_in, v], dim=1)
         skip_out  = F.relu(self.conv5(skip_in))
 
         x = F.relu(self.conv6(skip_in))
